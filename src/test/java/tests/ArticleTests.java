@@ -1,5 +1,7 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.NavigationUI;
@@ -9,9 +11,16 @@ import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
 
+
+@Epic("Tests for articles")
 public class ArticleTests extends CoreTestCase {
 
     @Test
+    @Features(value = {@Feature(value = "Search"),@Feature(value = "Article")})
+    @DisplayName("Swipe article to the footer")
+    @Description("We open an article and swipe it to the footer")
+    @Step("Starting test testSwipeArticle")
+    @Severity(value = SeverityLevel.MINOR)
     public void testSwipeArticle()
     {
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
@@ -26,7 +35,6 @@ public class ArticleTests extends CoreTestCase {
         ArticlePageObject.waitForTitleElement();
         ArticlePageObject.swipeToFooter();
     }
-
 
     @Test
     public void testAssertArticleTitle() {

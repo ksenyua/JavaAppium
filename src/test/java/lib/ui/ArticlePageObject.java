@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -34,11 +35,13 @@ abstract public class ArticlePageObject extends MainPageObject{
         super(driver);
     }
 
+    @Step("Waiting for title on the article page")
     public WebElement waitForTitleElement()
     {
         return this.waitForElementPresent(TITLE, "Cannot find article on page", 15);
     }
 
+    @Step("Get article title")
     public String getArticleTitle()
     {
         WebElement title_element = waitForTitleElement();
@@ -50,6 +53,7 @@ abstract public class ArticlePageObject extends MainPageObject{
             return title_element.getText();}
     }
 
+    @Step("Swiping to footer an article page")
     public void swipeToFooter()
     {
         if (Platform.getInstance().isAndroid()) {
@@ -69,6 +73,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    @Step("Adding the article to my list")
     public void addArticleToMyList(String name_of_folder)
     {
         this.waitForElementAndClick(
@@ -104,6 +109,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         );
     }
 
+    @Step("Cliking by Cancel button")
     public void clickCancel() {
         this.waitForElementAndClick(
                 CANCEL_BUTTON,
@@ -111,6 +117,7 @@ abstract public class ArticlePageObject extends MainPageObject{
                 5);
     }
 
+    @Step("Adding the article to my saved")
     public void addArticleToMySaved(){
         if (Platform.getInstance().isMw()) {
             this.removeArticleFromSavedIfItAdded();
@@ -118,6 +125,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         this.waitForElementAndClick(OPTIONS_ADD_TO_MY_LIST_BUTTON, "Cannot find option to add article to reading list", 15);
     }
 
+    @Step("Removing the article from saved if it has benn added")
     public void removeArticleFromSavedIfItAdded() {
         if (this.isElementPresent(OPTIONS_REMOVE_FROM_MY_LIST_BUTTON)) {
             this.waitForElementAndClick(
@@ -132,6 +140,7 @@ abstract public class ArticlePageObject extends MainPageObject{
             );
         }}
 
+    @Step("Closing the article")
     public void closeArticle()
     {
         if (Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
@@ -144,6 +153,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         }
     }
 
+    @Step("Getting xpath by name of folder")
     private static String getFolderXpathByName(String name_of_folder)
     {
         return MY_LIST_FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", name_of_folder);
@@ -169,10 +179,12 @@ abstract public class ArticlePageObject extends MainPageObject{
         );
     }
 
+    @Step("Waiting for description element")
     public WebElement waitForDescriptionElement() {
         return this.waitForElementPresent(DESCRIPTION, "Cannot find article description", 15);
     }
 
+    @Step("Getting article description")
     public String getArticleDescription() {
         WebElement description_element = waitForDescriptionElement();
         return description_element.getAttribute("name");

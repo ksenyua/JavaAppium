@@ -5,6 +5,7 @@ import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class SearchTests extends CoreTestCase {
@@ -31,7 +32,7 @@ public class SearchTests extends CoreTestCase {
         String search_line = "Java";
         SearchPageObject.typeSearchLine(search_line);
         int amount_of_search_results = SearchPageObject.getAmmountOfFoundArticle();
-        assertTrue(
+        Assert.assertTrue(
                 "Find results less than 2",
                 amount_of_search_results >=2
         );
