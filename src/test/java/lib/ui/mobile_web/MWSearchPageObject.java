@@ -13,6 +13,7 @@ public class MWSearchPageObject extends SearchPageObject {
         SEARCH_RESULT_ELEMENT = "css:ul.mw-mf-page-list>li.page-summary";
         SEARCH_EMPTY_RESULT_ELEMENT = "css:p.without-results";
         SEARCH_SKIP_BUTTON = "id:Skip";
+        SEARCH_TITLE_ELEMENT_TPL = "css:ul.page-list>li.page-summary[title='{SUBSTRING}']";
         SEARCH_INPUT_TEXT = "css:form.search-box>input[placeholder='Search Wikipedia']";
     }
     public MWSearchPageObject(RemoteWebDriver driver) {

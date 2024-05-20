@@ -81,19 +81,24 @@ public class MyListsTests extends CoreTestCase {
     @Test
     public void testSaveTwoArticleAndDeleteOne()
     {
+        String login = "ksu_0304";
+        String password = "AppiumTest";
+
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         String title_article_one = "British journalist";
         String title_article_two = "British archaeologist";
         String name_of_folder = "British famous people";
-        String search_line_find_one = "Dilys Powell";
-        String search_line_find_two = "Humfry Payone";
+        String search_line_find_one = "ilys Powell";
+        String search_line_find_two = "umfry Payone";
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line_find_one);
         if(Platform.getInstance().isAndroid()) {
             SearchPageObject.clickByArticleWithSubstring(title_article_one);
-        } else {
+        } else if (Platform.getInstance().isIOS()){
             SearchPageObject.clickByArticleWithSubstring(search_line_find_one);
+        } else {
+            SearchPageObject.clickByArticleWithSubstringByTitle(search_line_find_one);
         }
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
@@ -104,11 +109,22 @@ public class MyListsTests extends CoreTestCase {
         } else {
             ArticlePageObject.addArticleToMySaved();
         }
-        ArticlePageObject.closeArticle();
+        if(Platform.getInstance().isMw()) {
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+        }
+        if(Platform.getInstance().isMw()) {
+            ArticlePageObject.addArticleToMySaved();
+        }
+
+        if(Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
+            ArticlePageObject.closeArticle();
+        }
         if(Platform.getInstance().isIOS()){
             SearchPageObject.clickCancelSearch();
         }
-
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine(search_line_find_two);
         SearchPageObject.clickByArticleWithSubstring(title_article_two);
@@ -124,8 +140,8 @@ public class MyListsTests extends CoreTestCase {
         if(Platform.getInstance().isIOS()){
             SearchPageObject.clickCancelSearch();
         }
-
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
 
         if(Platform.getInstance().isIOS()){
@@ -135,9 +151,17 @@ public class MyListsTests extends CoreTestCase {
         if (Platform.getInstance().isAndroid()){
             MyListsPageObject.openFolderByName(name_of_folder);
         }
-        MyListsPageObject.swipeByArticleToDelete(title_article_two);
-        MyListsPageObject.waitForArticleAppearByTitle(title_article_one);
-        if(Platform.getInstance().isAndroid()){
+        if(Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
+            MyListsPageObject.swipeByArticleToDelete(title_article_two);
+        } else{
+            MyListsPageObject.swipeByArticleToDelete(search_line_find_two);
+        }
+        if(Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
+            MyListsPageObject.waitForArticleAppearByTitle(title_article_one);
+        } else {
+            MyListsPageObject.waitForArticleAppearByTitle(search_line_find_one);
+        }
+        if(Platform.getInstance().isAndroid() || Platform.getInstance().isMw()) {
         String title_expected = MyListsPageObject.getArticleTitleMyList();
         MyListsPageObject.clickArticleByTitle(title_article_one);
 

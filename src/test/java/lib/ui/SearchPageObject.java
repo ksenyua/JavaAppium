@@ -15,6 +15,7 @@ abstract public class SearchPageObject extends MainPageObject
     SEARCH_CANCEL_BUTTON,
     SEARCH_RESULT_BY_SUBSTRING_TPL,
     SEARCH_RESULT_ELEMENT,
+    SEARCH_TITLE_ELEMENT_TPL,
     SEARCH_TITLE_AND_DESCRIPTION_RESULT_BY_SUBSTRING_TP,
     SEARCH_EMPTY_RESULT_ELEMENT,
     SEARCH_SKIP_BUTTON,
@@ -85,6 +86,17 @@ abstract public class SearchPageObject extends MainPageObject
 
     public void clickSkip() {
         this.waitForElementAndClick(SEARCH_SKIP_BUTTON, "Cannot find and click skip button", 5);
+    }
+
+    private static String getResultTitleSearchElement(String substring)
+    {
+        return SEARCH_TITLE_ELEMENT_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    public void clickByArticleWithSubstringByTitle(String substring)
+    {
+        String search_result_xpath = getResultTitleSearchElement(substring);
+        this.waitForElementAndClick(search_result_xpath, "Cannot find and click search result with substring " + substring, 5);
     }
 
     public void assertThereIsNoResultOfSearch()
