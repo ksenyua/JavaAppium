@@ -2,6 +2,7 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.List;
 
@@ -13,9 +14,13 @@ abstract public class SearchPageObject extends MainPageObject
     SEARCH_INPUT,
     SEARCH_CANCEL_BUTTON,
     SEARCH_RESULT_BY_SUBSTRING_TPL,
-    SEARCH_RESULT_ELEMENT;
+    SEARCH_RESULT_ELEMENT,
+    SEARCH_TITLE_AND_DESCRIPTION_RESULT_BY_SUBSTRING_TP,
+    SEARCH_EMPTY_RESULT_ELEMENT,
+    SEARCH_SKIP_BUTTON,
+    SEARCH_INPUT_TEXT;
 
-    public SearchPageObject(AppiumDriver driver)
+    public SearchPageObject(RemoteWebDriver driver)
     {
         super(driver);
     }
@@ -76,6 +81,10 @@ abstract public class SearchPageObject extends MainPageObject
         By by = this.getLocatorByString(locator);
         List elements = driver.findElements(by);
         return elements.size();
+    }
+
+    public void clickSkip() {
+        this.waitForElementAndClick(SEARCH_SKIP_BUTTON, "Cannot find and click skip button", 5);
     }
 
     public void assertThereIsNoResultOfSearch()

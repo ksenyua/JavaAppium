@@ -2,10 +2,7 @@ package tests;
 
 import lib.CoreTestCase;
 import lib.Platform;
-import lib.ui.ArticlePageObject;
-import lib.ui.MyListsPageObject;
-import lib.ui.NavigationUI;
-import lib.ui.SearchPageObject;
+import lib.ui.*;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
@@ -15,6 +12,71 @@ import org.junit.Test;
 public class MyListsTests extends CoreTestCase {
 
     String name_of_folder = "Learning programming";
+
+    public void testSaveFirstArticleToMyList() {
+
+        String login = "ksu_0304";
+        String password = "AppiumTest";
+
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
+        ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
+        NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Java");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
+        String article_title = ArticlePageObject.getArticleTitle();
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToMyList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticlesToMySaved();
+            if (Platform.getInstance().isMw()) {
+                AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+                Auth.clickAuthButton();
+                Auth.enterLoginData(login, password);
+                Auth.submitForm();
+            }
+
+            ArticlePageObject.closeArticle();
+            if (Platform.getInstance().isAndroid()) {
+                SearchPageObject.initSearchInput();
+                SearchPageObject.typeSearchLine("Java");
+                SearchPageObject.clickByArticleWithSubstring("bject-oriented programming language");
+                if (Platform.getInstance().isAndroid()) {
+                    ArticlePageObject.addArticleToMyList(name_of_folder);
+                } else {
+                    ArticlePageObject.addArticlesToMySaved();
+
+                    ArticlePageObject.waitForTitleElement();
+                    assertEquals("We are not on the same page after login",
+                            article_title,
+                            ArticlePageObject.getArticleTitle());
+                    ArticlePageObject.addArticlesToMySaved();
+                }
+
+                ArticlePageObject.closeArticle();
+            } else {
+                ArticlePageObject.clickCancel();
+            }
+            NavigationUI.clickMyLists();
+            if(Platform.getInstance().isAndroid()) {
+                MyListsPageObject.openFolderByName(name_of_folder);
+            }
+            MyListsPageObject.swipeByArticleToDelete(article_title);
+            if (Platform.getInstance().isAndroid()) {
+                ArticlePageObject.closeArticle();
+            } else {
+                ArticlePageObject.clickCancel();
+            }
+            NavigationUI.openNavigation();
+            NavigationUI.clickMyLists();
+            if (Platform.getInstance().isAndroid()) {
+                MyListsPageObject.openFolderByName(name_of_folder);
+            } else {
+                MyListsPageObject.swipeByArticleToDelete(article_title);
+            }
+        }}
 
     @Test
     public void testSaveTwoArticleAndDeleteOne()
