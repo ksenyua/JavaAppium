@@ -28,6 +28,7 @@ abstract public class SearchPageObject extends MainPageObject
     }
 
     /*TEMPLATES METHODS */
+    @Step("Get result search element by substring")
     private static String getResultSearchElement(String substring)
     {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("", substring);
@@ -62,7 +63,7 @@ abstract public class SearchPageObject extends MainPageObject
         this.waitForElementAndSendKeys(SEARCH_INPUT, search_line, "Cannot find and type into search input", 5);
     }
 
-    @Step("Waiting for search result")
+    @Step("Waiting for search result by substring")
     public void waitForSearchResult(String substring)
     {
         String search_result_xpath = getResultSearchElement(substring);

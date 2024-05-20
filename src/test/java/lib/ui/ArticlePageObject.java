@@ -184,7 +184,7 @@ abstract public class ArticlePageObject extends MainPageObject{
         return this.waitForElementPresent(DESCRIPTION, "Cannot find article description", 15);
     }
 
-    @Step("Getting article description")
+    @Step("Get description on the article page")
     public String getArticleDescription() {
         WebElement description_element = waitForDescriptionElement();
         return description_element.getAttribute("name");

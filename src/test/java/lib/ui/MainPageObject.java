@@ -5,6 +5,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import io.qameta.allure.Attachment;
+import io.qameta.allure.Step;
 import lib.Platform;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -30,6 +31,7 @@ public class MainPageObject {
         this.driver = driver;
     }
 
+    @Step("Waiting for element present on page by locator")
     public WebElement waitForElementPresent(String locator, String error_message, long timeoutInSeconds)
     {
         By by = this.getLocatorByString(locator);
@@ -40,6 +42,7 @@ public class MainPageObject {
         );
     }
 
+    @Step("Waiting for element and click")
     public WebElement waitForElementAndClick(String locator, String error_message, long timeoutInSeconds)
     {
         WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
@@ -47,6 +50,7 @@ public class MainPageObject {
         return element;
     }
 
+    @Step("Waiting for element disappears from page")
     public boolean waitForElementNotPresent(String locator, String error_message, long timeoutInSeconds)
     {
         By by = this.getLocatorByString(locator);
@@ -57,6 +61,7 @@ public class MainPageObject {
         );
     }
 
+    @Step("Waiting for element and send keys")
     public WebElement waitForElementAndSendKeys(String locator, String value, String error_message, long timeoutInSeconds)
     {
         WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
@@ -64,6 +69,7 @@ public class MainPageObject {
         return element;
     }
 
+    @Step("Waiting for element and clear")
     public WebElement waitForElementAndClear(String locator, String error_message, long timeoutInSeconds)
     {
         WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
@@ -88,6 +94,7 @@ public class MainPageObject {
         return count;
     }
 
+    @Step("Swiping up on page")
     public void swipeUp(int timeOfSwipe)
     {
         if (driver instanceof AppiumDriver) {
@@ -119,6 +126,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Get element located on screen by locator")
     public boolean isElementLocatedOnTheScreen(String locator) {
         int element_location_by_y = this.waitForElementPresent(locator, "Cannot find element by locator", 10).getLocation().getY();
         if (Platform.getInstance().isMw()) {
@@ -130,10 +138,12 @@ public class MainPageObject {
         return element_location_by_y < screen_size_by_y;
     }
 
+    @Step("Waiting for element present on page")
     public boolean isElementPresent(String locator) {
         return getAmountOfElements(locator) > 0;
     }
 
+    @Step("Trying to click element with few attempts")
     public void tryClickElementWithFewAttempts(String locator, String error_message, int amount_of_attempts) {
         int current_attempts = 0;
         boolean need_more_attempts = true;
@@ -150,6 +160,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Scrolling web page up")
     public void scrollWebPageUp() {
         if (Platform.getInstance().isMw()) {
             JavascriptExecutor JSExecutor = (JavascriptExecutor) driver;
@@ -159,6 +170,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Scrolling web page till element not visible")
     public void scrollWebPageTillElementNotVisible(String locator, String error_message, int max_swipes) {
         int already_swiped = 0;
         WebElement element = this.waitForElementPresent(locator, error_message, 10);
@@ -171,6 +183,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Swiping up quick")
     public void swipeUpQuick()
     {
         swipeUp(200);
@@ -191,6 +204,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Clicking on element to the right upper corner")
     public void clickElementToTheRightUpperCorner(String locator, String error_message)
     {
         if (driver instanceof AppiumDriver) {
@@ -211,6 +225,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Swiping element to the left")
     public void swipeElementToLeft(String locator, String error_message)
     {
         if (driver instanceof AppiumDriver) {
@@ -240,6 +255,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Get amount of elements")
     public int getAmountOfElements(String locator)
     {
         By by = this.getLocatorByString(locator);
@@ -247,6 +263,7 @@ public class MainPageObject {
         return elements.size();
     }
 
+    @Step("Asserting element is not present on page")
     public void assertElementNotPresent(String locator, String error_message)
     {
         int amount_of_elements = getAmountOfElements(locator);
@@ -256,12 +273,14 @@ public class MainPageObject {
         }
     }
 
+    @Step("Waiting for element and get attribute")
     public String waitForElementAndGetAttribute(String locator, String attribute, String error_message, long timeoutInSeconds)
     {
         WebElement element = waitForElementPresent(locator, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
     }
 
+    @Step("Asserting element is present on page")
     public void assertElementPresent(String locator, String error_message){
         int ammount_of_elements = getAmountOfElements(locator);
         if (ammount_of_elements == 0) {
@@ -270,6 +289,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Get locator by string")
     public By getLocatorByString(String locator_with_type) {
         String[] exploded_locator = locator_with_type.split(Pattern.quote(":"), 2);
         String by_type = exploded_locator[0];
@@ -288,6 +308,7 @@ public class MainPageObject {
         }
     }
 
+    @Step("Taking screenshot")
     public String takeScreenShot(String name) {
         TakesScreenshot ts = (TakesScreenshot)this.driver;
         File source = ts.getScreenshotAs(OutputType.FILE);
@@ -301,6 +322,7 @@ public class MainPageObject {
         return path;
     }
 
+    @Step("Get screenshot")
     @Attachment
     public static byte[] screenshot(String path) {
         byte[] bytes = new byte[0];

@@ -37,6 +37,11 @@ public class ArticleTests extends CoreTestCase {
     }
 
     @Test
+    @Features(value = {@Feature(value = "Search"),@Feature(value = "Article")})
+    @DisplayName("Testing article has title")
+    @Description("We open an article and wait for title of article")
+    @Step("Starting test testArticleHasTitle")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testAssertArticleTitle() {
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         NavigationUI.click_button_skip();
